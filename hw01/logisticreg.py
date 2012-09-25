@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-naive bayes implementation for ml701 class.
+logistic regression implementation for ml701 class.
 willie neiswanger, 09/2012.
 """
 
@@ -28,14 +28,9 @@ def getTrainTest(X,Y,numTrain):
     return XTrain,YTrain,XTest,YTest
 
 #def trainModel(XTrain,YTrain):
-    # count number of A labels and B labels ( ie n_A and n_B)
-    # for each of 16 features, 2 classes, and 3 values, find number of examples who's feature i took value x in class Y
-        # return these parameters in some form (3d matrix?) (a 2d matrix per class) called model
 
 #def testModel(model,XTest,YTest):
-    # predict new label for each obs in XTest, and get accuracy by comparing with YTest
-    # return accuracy
-    
+
 #def plotAccuracyVsNumTrain(accuracyDict):
 
 # main function (carries out naive bayes part of 3.4 of hw)
