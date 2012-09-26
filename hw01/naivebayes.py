@@ -63,6 +63,7 @@ def ave100Iter(X,Y,numTrain=10):
 def main():
     X,Y = parseData()
     acc = []
+    print 'Naive Bayes'
     for m in range(2,200,2):
         acc.append(ave100Iter(X,Y,m))
         print 'finished m = ', str(m)

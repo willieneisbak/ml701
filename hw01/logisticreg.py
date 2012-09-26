@@ -38,7 +38,7 @@ def getTrainTest(X,Y,numTrain):
 def trainModel(XTrain,YTrain):
     w = np.array([0.]*int(d))
     step = 0.0001; eps = 100; numsteps = 0
-    while eps>0.001:
+    while eps>0.002:
         wNew = np.array([ w[j] + step*sum([(YTrain[i] - (1/float(1 + math.exp(-np.dot(w,XTrain[i,:])))))*XTrain[i,j] for i in range(XTrain.shape[0])]) for j in range(int(d))])
         eps = np.linalg.norm(wNew - w)
         w = wNew
@@ -66,6 +66,7 @@ def ave100Iter(X,Y,numTrain=10):
 def main():
     X,Y = parseData()
     acc = []
+    print 'Logistic Regression'
     for m in range(2,200,2):
         acc.append(ave100Iter(X,Y,m))
         print 'finished m = ', str(m)
