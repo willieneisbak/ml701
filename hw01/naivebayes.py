@@ -66,5 +66,5 @@ def main():
     print 'Naive Bayes'
     for m in range(2,200,2):
         acc.append(ave100Iter(X,Y,m))
-        print 'finished m = ', str(m)
+        print 'finished m = ', str(m), '  Accuracy = ', str(acc[-1])
     return acc
