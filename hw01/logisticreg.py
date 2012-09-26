@@ -41,7 +41,6 @@ def trainModel(XTrain,YTrain):
     while eps>0.001:
         wNew = np.array([ w[j] + step*sum([(YTrain[i] - (1/float(1 + math.exp(-np.dot(w,XTrain[i,:])))))*XTrain[i,j] for i in range(XTrain.shape[0])]) for j in range(int(d))])
         eps = np.linalg.norm(wNew - w)
-        print eps ###
         w = wNew
     return w
  
