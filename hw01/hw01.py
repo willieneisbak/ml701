@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 
 nb_acc = nb.main()
 lr_acc = lr.main()
-plt.plot(range(2,200,2),nb.main(),label='naive bayes')
-plt.plot(range(2,200,2),lr.main(),label='logistic regression')
+plt.plot(range(2,200,2),nb_acc,label='naive bayes')
+plt.plot(range(2,200,2),lr_acc,label='logistic regression')
 plt.legend()
 plt.xlabel('Size of Training Set')
 plt.ylabel('Classification Error')
