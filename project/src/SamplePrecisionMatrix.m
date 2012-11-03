@@ -1,4 +1,4 @@
-function [] = SamplePrecisionMatrix(A,b,D)
+function K = SamplePrecisionMatrix(A,b,D)
 
 % SAMPLEPRECISIONMATRIX(A,b,D) Sample precision matrix K ~ G-Wishart_A(b,D)
 %
@@ -15,7 +15,7 @@ function [] = SamplePrecisionMatrix(A,b,D)
 assert(size(A,1)==size(A,2),'Error: A must be a square matrix');
 assert(size(D,1)==size(D,2),'Error: D must be a square matrix');
 assert(size(A,1)==size(D,1),'Error: A and D must be the same size');
-assert(length(b)==1),'Error: b must be a scalar');
+assert(length(b)==1,'Error: b must be a scalar');
 
 % Get dimension
 p = length(A);
@@ -28,7 +28,7 @@ T = chol(inv(D));
 
 % Create upper triangular matrix H, where h_ij = t_ij/t_jj and h_ii = 1
 H = T./repmat(diag(T)',p,1);
-H(diag(ones(p,1))) = 1;
+H(logical(diag(ones(p,1)))) = 1;
 
 % Get number of 1's in rows of A
 Nu = sum(A,2);
@@ -36,17 +36,17 @@ Nu = sum(A,2);
 % Sample the free variables psi_ij for all i <= j
 Psi = randn(p);
 Psi(~A) = 0;
-Psi(diag(ones(p,1))) = sqrt(chi2rnd(b+Nu));
-Psi = zeros(p);
+Psi(logical(diag(ones(p,1)))) = sqrt(chi2rnd(b+Nu));
+%Psi = zeros(p);  % BDgraph way
 for i = 1:p
-    for j = 1:p
-        %if (i==j) Psi(i,j) = sqrt(chi2rnd(b+Nu(i))); end
-        %if (A(i,j)==1) Psi(i,j) = randn; end
+    for j = i:p
+        %if (i==j) Psi(i,j) = sqrt(chi2rnd(b+Nu(i))); end  % BDgraph way
+        %if (A(i,j)==1) Psi(i,j) = randn; end  % BDgraph way
         if (A(i,j)==0 & i~=j)
             Psi(i,j) = -sum(Psi(i,i:j-1)*H(i:j-1,j));
             if (i > 1)
                 for r = 1:i-1
-                    Psi(i,j) = Psi(i,j) - (sum(Psi(r,r:i)*H(r:i,i))*sum(Psi(r,r:j)*H(r:j,j)))/(Psi(i,i))
+                    Psi(i,j) = Psi(i,j) - (sum(Psi(r,r:i)*H(r:i,i))*sum(Psi(r,r:j)*H(r:j,j)))/(Psi(i,i));
                 end
             end
         end
@@ -57,7 +57,6 @@ end
 Phi = Psi*T;
 
 % Calculate precision matrix K
-K = Psi'*Psi;
+K = Phi'*Phi;
 
 end
-

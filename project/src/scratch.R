@@ -1,3 +1,13 @@
+
+todo:
+# need to parse data into consistent format
+# have parseStockData.m, parseGeneNetwork.m, parseBioData.m, etc,
+    # all which parse data into consistent format
+
+
+
+
+
 ## Algorithm 2.1: BD-MCMC algorithm for high-dimentional problem (roughly graphs with more than 8 nodes)
 bdmcmc.high=function(data,n=NULL,meanzero=FALSE,iter=5000,burn=floor(iter/2),
 skip=1,gamma.b=1,prior.g="Uniform",b=3,D=NULL,A=NULL,print=FALSE,sumery=FALSE) ### params
