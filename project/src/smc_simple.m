@@ -2,7 +2,7 @@ function samples = smc_simple(data)
 
 % smc_simple(A,b,D) Sampling with simple smc.
 %
-% Description of code
+% Description of function 
 %
 % Inputs:
 % (1) Input one

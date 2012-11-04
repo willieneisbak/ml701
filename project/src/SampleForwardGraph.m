@@ -1,28 +1,32 @@
-function A = SampleForwardGraph(A,b,D)
+function newA = SampleForwardGraph(A)
 
-% SampleForwardGraph(A,b,D) Sample precision matrix K ~ G-Wishart_A(b,D)
+% SampleForwardGraph(A,b,D) Sample graph G_{t} given graph G_{t-1}  
 %
-% Sample a precision matrix K which is distributed according to a
-% G-Wishart distribution with graph structure A, degrees of freedom b,
-% and scale matrix D
+% Description of function
 %
 % Inputs:
-% (1) A is the adjacency matrix of the graph in the G-Wishart prior
-% (2) b is the number of degrees of freedom of the G-Wishart prior
-% (3) D is the scale matrix of the G-Wishart prior
+% (1) Input one
+% (2) Input two
+% (3) Input three
 
 
 
 % Default params:
 % for two beta distributions, want default params:
 
-alpha1 = 9;
-beta1 = 1;
+%alpha1 = 9;
+%beta1 = 1;
 
-alpha0 = 1;
-beta0 = 9;
+%alpha0 = 1;
+%beta0 = 9;
 
 
-% compute probability that next edge is one and next edge is zero (should only need one matrix with one param specifying prob that next edge is 1)
-% then sample from cat(that param) ie, take a uniform random and see if less than that value
+% param1 is fixed prob of edge flipping on->off or off->on
+param1 = 0.1
 
+% generate a matrix of uniformly distributed random numbers
+randMat = rand(length(A));
+
+newA = A;
+newA(intersect(find(randMat<param1),find(A))) = 0;
+newA(intersect(find(randMat<param1),find(~A))) = 1;
