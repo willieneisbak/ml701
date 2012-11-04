@@ -22,7 +22,7 @@ function newA = SampleForwardGraph(A)
 
 
 % param1 is fixed prob of edge flipping on->off or off->on
-param1 = 0.1
+param1 = 0.1;
 
 % generate a matrix of uniformly distributed random numbers
 randMat = rand(length(A));
