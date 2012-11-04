@@ -1,16 +1,20 @@
-function newSamples = resampleParticles(samples,weights)
+function sampleInd = resampleParticles(weights)
 
-% returns a new set of samples that have been resampled given the weights vector 
+% returns a set of sample indices that have been resampled given the weights vector.
+% carries out multinomial resampling.
 %
 % Inputs:
-% (1) samples is
-% (2) weights is a vector of sample weights
+% (1) weights is a vector of sample weights
 
-% normalize weights
+
+% note: if i don't worry about underflow in normalization, this whole function could be:
+%sampleInd = catrnd(exp(weights),length(weights));
+
+% normalize weights and check for errors
 normWeights = exp(weights)/sum(exp(weights));
 if sum(normWeights)==0
     error('NORMALIZED WEIGHTS SUM TO 0. POSSIBLE UNDERFLOW ISSUES.');
 end
 
 % resample
-newSamples = catrnd(normWeights,length(samples)) %%%% I'm assuming length(samples) is number of samples
+sampleInd = catrnd(normWeights,length(weights))
