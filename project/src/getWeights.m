@@ -1,6 +1,6 @@
 function weights = getWeights(samples,data)
 
-% getWeights(A,b,D) Compute importance weights for each sample  
+% getWeights(A,b,D) Compute importance weights for each sample (for smcSimple)
 %
 % Description of function
 %
@@ -10,5 +10,11 @@ function weights = getWeights(samples,data)
 % (3) Input three
 
 
+% Notes:
+% input samples could be: only the newest precision matrices, or newest precision matrices and graphs, or all precision matrices and graphs.
+% data could be: entire data cell or just data for relevant time step
 
-% inputs give samples (only the newest precision matrices, or newest precision matrices and graphs, or all precision matrices and graphs).
+% instead of likelihood (product) of prob of each data point, could take sum of log prob of each data point.
+
+
+weight = mvnpdf(data,0*
