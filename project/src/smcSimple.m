@@ -28,13 +28,14 @@ function finalSamples = smcSimple(data)
 
 d = size(data{1},2);
 
-P = 5000; % number of particles
+P = 10000; % number of particles
 b = 3; % G-Wishart prior param b
 D = eye(d); % G-Wishart prior param D
 
 result = bdmcmc_static(data{1},P,b,D); 
 normLambdas = result{4}/sum(result{4}); newInd = catrnd(normLambdas,length(normLambdas));
-ACell{1} = result{2}(newInd); KCell{1} = result{1}(newInd); % resample based on bdmcmc waiting times 
+%ACell{1} = result{2}(newInd); KCell{1} = result{1}(newInd); % resample based on bdmcmc waiting times 
+ACell{1} = result{2}; KCell{1} = result{1}; weightCell{1} = result{4};
 for t=2:length(data)
     newAs = {}; newKs = {};
     for p=1:P
@@ -43,7 +44,8 @@ for t=2:length(data)
     end
     weights = getWeights_smcSimple(newKs,data{t}); % compute weights
     resampleInd = resampleParticles(weights); % resample particles
-    ACell{t} = newAs(resampleInd); KCell{t} = newKs(resampleInd);
+    %ACell{t} = newAs(resampleInd); KCell{t} = newKs(resampleInd); % resample
+    ACell{t} = newAs; KCell{t} = newKs; weightCell{t} = weights;
     fprintf('finished time-step t=%d\n',t);
 end
-finalSamples = {ACell,KCell};
+finalSamples = {ACell,KCell,weightCell};
