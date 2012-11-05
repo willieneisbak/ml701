@@ -28,7 +28,7 @@ function finalSamples = smcSimple(data)
 
 d = size(data{1},2);
 
-P = 5000; % number of particles
+P = 10000; % number of particles
 b = 3; % G-Wishart prior param b
 D = eye(d); % G-Wishart prior param D
 
