@@ -23,11 +23,14 @@ function finalSamples = smcSimple(data)
 %   compute weight: P(X|K)
 % ---------------------------------------------
 
+% Preprocess data
+    % subtract mean from data and divide by standard deviation
+
 d = size(data{1},2);
 
-P = 5000; %%%% Number of particles. Put here or have as param to this function?
-b = 3; % set prior param b
-D = eye(d); %%% prior param D
+P = 5000; % number of particles
+b = 3; % G-Wishart prior param b
+D = eye(d); % G-Wishart prior param D
 
 result = bdmcmc_static(data{1},P,b,D); 
 ACell{1} = result{2}; KCell{1} = result{1};
@@ -40,5 +43,6 @@ for t=2:length(data)
     weights = getWeights_smcSimple(newKs,data{t}); % compute weights
     resampleInd = resampleParticles(weights); % resample particles
     ACell{t} = newAs(resampleInd); KCell{t} = newKs(resampleInd);
+    fprintf('finished time-step t=%d\n',t);
 end
 finalSamples = {ACell,KCell};
