@@ -1,4 +1,4 @@
-function samples = bdmcmc_static(data_t,P,b,D)
+function samples = bdmcmc_static(data_t,P,b,D,printout)
 
 % BDMCMC for samples from posterior over graphs and precision
 % matrices in a Bayesian Gaussian graphical model
@@ -8,6 +8,10 @@ function samples = bdmcmc_static(data_t,P,b,D)
 % (2) P is the number of particles (number of samples to generate) 
 % (3) b is the G-Wishart degrees of freedom parameter 
 % (4) D is the G-Wishart matrix parameter
+
+if nargin<5
+    printout==true;
+end
 
 burn=2000;
 iter = P+burn;
@@ -36,7 +40,7 @@ alla=ceil(iter/2000); % alla needs to be saved for plotConvergency function
 
 for g=1:iter
     % if print==T, cat(paste('time =', format(Sys.time(), '%X')), paste(c('Sum.links = ',sum(A)),collapse=''), fill = TRUE, labels = paste('{',paste(c('iter=',g),collapse=''),'}:',sep='')); end
-    fprintf('iter=%d\n',g)
+    if printout, fprintf('iter=%d\n',g); end
     rates = zeros(length(K));
     for i=1:(p-1)
         for j=(i+1):p
