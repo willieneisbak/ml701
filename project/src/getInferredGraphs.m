@@ -14,7 +14,6 @@ finalKs = finalSamples{2};
 finalWeights = finalSamples{3};
 
 for i=1:length(finalAs)
-    [meanGraph,meanWeightedGraph] = meanGraph(finalAs{i},finalWeights{i});
-    inferredGraph{i} = meanGraph;
+    [meanGraphMat,meanWeightedGraph] = meanGraph(finalAs{i},finalWeights{i});
+    inferredGraph{i} = meanGraphMat;
 end
-
