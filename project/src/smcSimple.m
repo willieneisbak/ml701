@@ -33,7 +33,8 @@ b = 3; % G-Wishart prior param b
 D = eye(d); % G-Wishart prior param D
 
 result = bdmcmc_static(data{1},P,b,D); 
-ACell{1} = result{2}; KCell{1} = result{1};
+normLambdas = result{4}/sum(result{4}); newInd = catrnd(normLambdas,length(normLambdas));
+ACell{1} = result{2}(newInd); KCell{1} = result{1}(newInd); % resample based on bdmcmc waiting times 
 for t=2:length(data)
     newAs = {}; newKs = {};
     for p=1:P

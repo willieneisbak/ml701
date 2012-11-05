@@ -71,6 +71,7 @@ end
 
 samples = {Ks,As,allA,lambda};
 % maybe: resample As and Ks based on time (lambdas) in each to get "correct unweighted samples"
+    % currently i do this in smcSimple after getting results from this function
 
 % utility function
 function result=melt(rates,p)
