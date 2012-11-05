@@ -10,7 +10,7 @@
 function [network,sampleData] = DynamicNetworkSimulation()
 
 NUM_VERTICES = 10;
-INITIAL_NUM_EDGES = 8;
+INITIAL_NUM_EDGES = 5;
 NUM_SAMPLES = 100;
 NUM_TIME_STEPS = 5;
 MIN_EDGE_CHANGE = 1;
