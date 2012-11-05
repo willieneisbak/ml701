@@ -1,4 +1,4 @@
-function meanGraph = expectedGraph(graphCell,weightVec)
+function [meanGraph,meanWeightedGraph] = meanGraph(graphCell,weightVec)
 
 % this function returns the expected graph given a cell of graph samples
 % and a vector of weights-per-sample
@@ -12,4 +12,5 @@ for i=1:length(graphCell)
     sumGraphs = sumGraphs + (graphCell{i}/weightVec(i)); % add each graph, weighted, onto sumGraphs
 end
 denom = sum(ones(1,length(graphCell))./weightVec); % compute denominator
-meanGraph = sumGraphs / denom;
+meanWeightedGraph = sumGraphs / denom;
+meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanGraph>0.15)) = 1; %%%%fixed 0.15 here for now
