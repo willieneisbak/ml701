@@ -17,4 +17,4 @@ if sum(normWeights)==0
 end
 
 % resample
-sampleInd = catrnd(normWeights,length(weights))
+sampleInd = catrnd(normWeights,length(weights));

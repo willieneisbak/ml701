@@ -18,7 +18,7 @@ function newA = SampleForwardGraph(A)
 %beta0 = 9;
 
 % param1 is fixed prob of edge flipping on->off or off->on
-param1 = 0.1;
+param1 = 0.01;
 
 % generate a matrix of uniformly distributed random numbers
 randMat = rand(length(A));
@@ -26,3 +26,4 @@ randMat = rand(length(A));
 newA = A;
 newA(intersect(find(randMat<param1),find(A))) = 0;
 newA(intersect(find(randMat<param1),find(~A))) = 1;
+newA = triu(newA,1);

@@ -25,13 +25,11 @@ function finalSamples = smcSimple(data)
 
 d = size(data{1},2);
 
-P = 1000; %%%% Number of particles. Put here or have as param to this function?
+P = 5000; %%%% Number of particles. Put here or have as param to this function?
 b = 3; % set prior param b
 D = eye(d); %%% prior param D
 
-%ACell = {}; KCell = {};
-%[ACell{1},KCell{1}] = bdmcmc_static(data{1},P,b,D); %%%% NEED TO MAKE. returns cell of graph samples and cell of associated precision-matrix samples
-result = bdmcmc_static(data{1},P,b,D); %%%% NEED TO MAKE. returns cell of graph samples and cell of associated precision-matrix samples
+result = bdmcmc_static(data{1},P,b,D); 
 ACell{1} = result{2}; KCell{1} = result{1};
 for t=2:length(data)
     newAs = {}; newKs = {};

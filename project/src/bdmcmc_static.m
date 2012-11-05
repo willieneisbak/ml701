@@ -9,7 +9,8 @@ function samples = bdmcmc_static(data_t,P,b,D)
 % (3) b is the G-Wishart degrees of freedom parameter 
 % (4) D is the G-Wishart matrix parameter
 
-iter = 2000; burn = iter/2;
+burn=2000;
+iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
 A = ones(p); A = triu(A,1);  % init A as an upper triangular matrix with all 1s
