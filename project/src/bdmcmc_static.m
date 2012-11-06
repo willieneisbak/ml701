@@ -13,7 +13,7 @@ if nargin<5
     printout==true;
 end
 
-burn=2000;
+burn=1000;
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
