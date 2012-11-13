@@ -5,32 +5,53 @@
 
 function hw03()
     dat = csvread('hw3-cluster.csv'); 
-    % carry out 200 iterations of kmeans
-    meanscell = {};
-    wcsosVec = [];
-    for i=1:200
-        [datLabels,datMeans] = kmeans(dat,5);
-        meanscell{end+1} = datMeans;
-        wcsosVec(end+1) = getWcSumOfSquares(dat,datLabels,datMeans);
-    end
-    % plot data and means for all iterations
-    plot(dat(:,1),dat(:,2),'o','color',[0.5,0.5,0.5]);
-    for i=1:length(meanscell)
-        hold on
-        plot(meanscell{i}(:,1), meanscell{i}(:,2), 'o','k');
-    end
-    % get min, mean, and st-dev of the within-cluster sum of squares
-    fprintf('Minimum within-cluster sum of squares:%f\n',min(wcsosVec));
-    fprintf('Mean within-cluster sum of squares:%f\n',mean(wcsosVec));
-    fprintf('Standard deviation of within-cluster sum of squares:%f\n',std(wcsosVec));
+    doPartsBandC(dat,'initrand');
+    doPartsBAndC(dat,'init++')';
+    doPartsEandF(dat);
+    dat2 = csvread('hw3-cluster2.csv');
+    doPartsEandF(dat2);
 
-    function [labels,means]=kmeans(data,k)
-        % initialize clusters to random data points
-        temp = [1:size(data,1)];
-        for a = 1 : k
-            nextInd = floor((rand * length(temp)) - 0.0001) + 1;   % in place of randi() for compatibility with older MATLAB
-            means(a,:) = data(temp(nextInd),:);
-            temp(nextInd) = [];
+    function doPartsBandC(data,initstring)
+        % carry out 200 iterations of kmeans
+        [meanscell,wcsosVec] = runMultipleKMeans(data,5,200,initstring);
+        % plot data and means for all iterations
+        plot(dat(:,1),dat(:,2),'o','color',[0.5,0.5,0.5]);
+        for i=1:length(meanscell)
+            hold on; plot(meanscell{i}(:,1), meanscell{i}(:,2), 'o','k');
+        end
+        % get min, mean, and st-dev of the within-cluster sum of squares
+        fprintf('Minimum within-cluster sum of squares:%f\n',min(wcsosVec));
+        fprintf('Mean within-cluster sum of squares:%f\n',mean(wcsosVec));
+        fprintf('Standard deviation of within-cluster sum of squares:%f\n',std(wcsosVec));
+    end
+
+    function doPartsEandF(data)
+        % find best K
+        initstring = 'initrand'; % or should I use 'init++'
+        wcsosPerK = [];
+        for k=1:15
+            [meanscell,wcsosVec] = runMultipleKMeans(data,k,200,initstring);
+            wcsosPerK(k) = min(wcsosVec);
+        end
+        plot(1:15,wcsosPerK,'o');
+        %plot(1:15,sqrt(wcsosPerK),'o');
+    end
+
+    function [meanscell,wcsosVec] = runMultipleKMeans(data,k,iter,initstring)
+        % run kmeans multiple times, get within-cluster sum of squares each time
+        meanscell = {}; wcsosVec = [];
+        for i=1:iter
+            [dataLabels,dataMeans] = kmeans(data,k,initstring);
+            meanscell{end+1} = dataMeans;
+            wcsosVec(end+1) = getWcSumOfSquares(data,dataLabels,dataMeans);
+        end
+    end
+
+    function [labels,means]=kmeans(data,k,whichInit)
+        if strcmpi(whichInit,'initrand')
+            means = initMeans_rand(data,k);
+        elseif strcmpi(whichInit,'init++')
+            means = initMeans_plusplus(data,k);
         end
         %% temp = randperm(size(data,1),k);
         % kmeans algorithm
@@ -55,6 +76,20 @@ function hw03()
             end
         end
         fprintf('Number of iters taken for convergence: %d\n',itercount);
+
+    function means = initMeans_rand(data,k)
+        % initialize clusters to random data points
+        temp = [1:size(data,1)];
+        for a = 1 : k
+            nextInd = floor((rand * length(temp)) - 0.0001) + 1;   % in place of randi() for compatibility with older MATLAB
+            means(a,:) = data(temp(nextInd),:);
+            temp(nextInd) = [];
+        end
+    end
+    
+    function means = initMeans_plusplus(data,k)
+        % write k-means++ initialization here
+    end
 
     function wcsos = getWcSumOfSquares(data,labels,means)
         % get the within-cluster sum of squares
