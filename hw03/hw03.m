@@ -53,7 +53,6 @@ function hw03()
         elseif strcmpi(whichInit,'init++')
             means = initMeans_plusplus(data,k);
         end
-        %% temp = randperm(size(data,1),k);
         % kmeans algorithm
         lastmeans = [];
         itercount = 0;
@@ -85,6 +84,8 @@ function hw03()
             means(a,:) = data(temp(nextInd),:);
             temp(nextInd) = [];
         end
+        %% can i do the following instead of all the above?
+        %% temp = randperm(size(data,1),k);
     end
     
     function means = initMeans_plusplus(data,k)
