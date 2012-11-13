@@ -32,6 +32,7 @@ function hw03()
             means(a,:) = data(temp(nextInd),:);
             temp(nextInd) = [];
         end
+        %% temp = randperm(size(data,1),k);
         % kmeans algorithm
         lastmeans = [];
         itercount = 0;
