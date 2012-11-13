@@ -75,6 +75,7 @@ function hw03()
             end
         end
         fprintf('Number of iters taken for convergence: %d\n',itercount);
+    end
 
     function means = initMeans_rand(data,k)
         % initialize clusters to random data points
