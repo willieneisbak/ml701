@@ -4,37 +4,57 @@
 %
 
 function hw03()
-    dat = csvread('hw3-cluster.csv'); 
-    doPartsBandC(dat,'initrand');
-    doPartsBAndC(dat,'init++')';
-    doPartsEandF(dat);
+    dat = csvread('hw3-cluster.csv');
+    fprintf('\nK-means with random initialization:\n'); doPartsBandC(dat,'initrand');
+    fprintf('\nK-means with K-means++ initialization:\n'); doPartsBandC(dat,'init++');
+    fprintf('\nK-means with 5 clusters:\n'); doPartsEandF(dat);
     dat2 = csvread('hw3-cluster2.csv');
-    doPartsEandF(dat2);
+    fprintf('\nK-means with 3/9 clusters:\n'); doPartsEandF(dat2);
+    dat3 = csvread('hw3-cluster3.csv');
+    fprintf('\nK-means without normalization:\n'); doPartsGandH(dat3);
+    fprintf('\nK-means with normalization:\n'); doPartsGandH(normalizeData(dat3));
 
     function doPartsBandC(data,initstring)
         % carry out 200 iterations of kmeans
         [meanscell,wcsosVec] = runMultipleKMeans(data,5,200,initstring);
         % plot data and means for all iterations
-        plot(dat(:,1),dat(:,2),'o','color',[0.5,0.5,0.5]);
+        figure,plot(data(:,1),data(:,2),'o','color',[0.5,0.5,0.5]);
         for i=1:length(meanscell)
-            hold on; plot(meanscell{i}(:,1), meanscell{i}(:,2), 'o','k');
+            hold on; plot(meanscell{i}(:,1), meanscell{i}(:,2), 'o', 'color','k','MarkerFaceColor', 'k');
         end
+        drawnow
         % get min, mean, and st-dev of the within-cluster sum of squares
-        fprintf('Minimum within-cluster sum of squares:%f\n',min(wcsosVec));
-        fprintf('Mean within-cluster sum of squares:%f\n',mean(wcsosVec));
-        fprintf('Standard deviation of within-cluster sum of squares:%f\n',std(wcsosVec));
+        fprintf('Minimum within-cluster sum of squares: %f\n',min(wcsosVec));
+        fprintf('Mean within-cluster sum of squares: %f\n',mean(wcsosVec));
+        fprintf('Standard deviation of within-cluster sum of squares: %f\n',std(wcsosVec));
     end
 
     function doPartsEandF(data)
         % find best K
-        initstring = 'initrand'; % or should I use 'init++'
+        initstring = 'initrand';
         wcsosPerK = [];
         for k=1:15
             [meanscell,wcsosVec] = runMultipleKMeans(data,k,200,initstring);
             wcsosPerK(k) = min(wcsosVec);
+            fprintf('Completed: K=%d\n',k);
         end
-        plot(1:15,wcsosPerK,'o');
-        %plot(1:15,sqrt(wcsosPerK),'o');
+        figure
+        subplot(1,2,1), plot(1:15,wcsosPerK,'o'); title('Min-WCSOS vs. K');
+        subplot(1,2,2), plot(1:15,sqrt(wcsosPerK),'o'); title('sqrt(Min-WCSOS) vs. K');
+        drawnow
+    end
+
+    function doPartsGandH(data)
+        % experiment with normalization
+        initstring = 'init++';
+        [meanscell,wcsosVec] = runMultipleKMeans(data,2,500,initstring);
+        % plot data and means for all iterations
+        figure,plot(data(:,1),data(:,2),'o','color',[0.5,0.5,0.5]);
+        for i=1:length(meanscell)
+            hold on; plot(meanscell{i}(:,1), meanscell{i}(:,2), 'o', 'color','k','MarkerFaceColor', 'k');
+        end
+        drawnow
+        disp('Results shown in plot.')
     end
 
     function [meanscell,wcsosVec] = runMultipleKMeans(data,k,iter,initstring)
@@ -54,43 +74,45 @@ function hw03()
             means = initMeans_plusplus(data,k);
         end
         % kmeans algorithm
-        lastmeans = [];
-        itercount = 0;
-        while lastmeans~=means
+        lastmeans = []; itercount = 0;
+        while (not(isequal(lastmeans,means)) & itercount<100)
             itercount = itercount+1;
             lastmeans=means;
-            % assign each example to closest mean in means vec  (euc distance)
+            % assign each example to closest mean in means vec
             for k = 1 : size(means,1)
                 diffmat = data - repmat(means(k,:), size(data,1), 1);
                 distmat(:,k) = sqrt(sum(diffmat .* diffmat, 2));  % distmat(i,k) holds distance of i_th data to k_th mean
             end
             for i = 1 : size(data,1)
-                [del, keep] = max(distmat(i,:));
+                [del, keep] = min(distmat(i,:));
                 labels(i) = keep;
             end
             % assign each mean in means vec to mean of assigned examples
-            for k = 1 : length(means)
+            for k = 1 : size(means,1)
                 assignedInd = find(labels == k);
-                means(a,:) = sum(data(assignedInd, :))/length(assignedInd); % compute mean
+                means(k,:) = sum(data(assignedInd, :))/length(assignedInd); % compute mean
             end
         end
-        fprintf('Number of iters taken for convergence: %d\n',itercount);
     end
 
     function means = initMeans_rand(data,k)
         % initialize clusters to random data points
-        temp = [1:size(data,1)];
-        for a = 1 : k
-            nextInd = floor((rand * length(temp)) - 0.0001) + 1;   % in place of randi() for compatibility with older MATLAB
-            means(a,:) = data(temp(nextInd),:);
-            temp(nextInd) = [];
-        end
-        %% can i do the following instead of all the above?
-        %% temp = randperm(size(data,1),k);
+        means = data(randperm(size(data,1),k),:);
     end
     
     function means = initMeans_plusplus(data,k)
-        % write k-means++ initialization here
+        % k-means++ initialization
+        means(1,:) = data(randi(size(data,1)),:);
+        for a=2:k
+            for b=1:size(means,1);
+                tmpmat = data - repmat(means(b,:), size(data,1), 1);
+                distmat(:,b) = sqrt(sum(tmpmat.*tmpmat,2));
+            end
+            datadist = min(distmat,[],2);
+            datadist = datadist / sum(datadist);
+            nextInd = catrnd(datadist);
+            means(a,:) = data(nextInd,:);
+        end
     end
 
     function wcsos = getWcSumOfSquares(data,labels,means)
@@ -101,4 +123,18 @@ function hw03()
             wcsos = wcsos + norm(data(i,:) - means(labels(i),:))^2;
         end
     end
+
+    function ind = catrnd(p,n)
+        % get n samples from a categorical distribution with parameter p (a vector)
+        if nargin==1, n=1; end
+        k = length(p);
+        p = reshape(p,k,1);
+        ind = sum(repmat(rand(1,n),k,1) > repmat(cumsum(p)/sum(p),1,n),1)+1;
+    end
+    
+    function data = normalizeData(data)
+        data = data - repmat(mean(data),size(data,1),1); 
+        data = data ./ repmat(std(data),size(data,1),1);
+    end
+
 end
