@@ -23,9 +23,6 @@ function finalSamples = smcSimple(data)
 %   compute weight: P(X|K)
 % ---------------------------------------------
 
-% Preprocess data
-    % subtract mean from data and divide by standard deviation
-
 d = size(data{1},2);
 
 P = 10000; % number of particles
@@ -44,7 +41,7 @@ for t=2:length(data)
     end
     weights = getWeights_smcSimple(newKs,data{t}); % compute weights
     resampleInd = resampleParticles(weights); % resample particles
-    %ACell{t} = newAs(resampleInd); KCell{t} = newKs(resampleInd); % resample
+    %ACell{t} = newAs(resampleInd); KCell{t} = newKs(resampleInd);
     ACell{t} = newAs; KCell{t} = newKs; weightCell{t} = weights;
     fprintf('finished time-step t=%d\n',t);
 end
