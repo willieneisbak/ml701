@@ -1,8 +1,7 @@
-function accVsPartMat = smc_accuracyVsParticles()
+function accVsPartMat = exp01_smcAccuracyVsParticles()
 
 % this function returns a 2xnumTrials matrix containing results of 
-% empirical accuracy vs precision
-%
+%  empirical accuracy vs precision.
 
 addpath('synthetic-data-generation');
 [network,sampleData] = StaticNetworkSimulation();
