@@ -1,13 +1,13 @@
-function [network,sampledData] = getStaticNetwork(NUM_VERTICES,NUM_EDGES,NUM_SAMPLES,MAX_DEGREE,THETA_MIN,THETA_MAX)
+function [network,data] = getStaticNetwork(NUM_VERTICES,NUM_EDGES,NUM_SAMPLES,MAX_DEGREE,THETA_MIN,THETA_MAX)
 
 if nargin<1, NUM_VERTICES = 10; end
-if nargin<2, NUM_EDGES = 5; end
+if nargin<2, NUM_EDGES = floor(sqrt(NUM_VERTICES)); end
 if nargin<3, NUM_SAMPLES = 100; end
 
-global MAX_DEGREE; global THETA_MIN, global THETA_MAX
-if nargin<4, MAX_DEGREE = 6; end
+global MAX_DEGREE; global THETA_MIN; global THETA_MAX
+if nargin<4, MAX_DEGREE = 5; end
 if nargin<5, THETA_MIN = 0.5; end
-if nargin<6, THETA_MAX = 1; END
+if nargin<6, THETA_MAX = 1; end 
 
 % generate a random graph with given number of nodes and edges
 network = GenerateGraph(NUM_VERTICES,NUM_EDGES);
@@ -21,4 +21,4 @@ d = sqrt(diag(diag(inv(network))));
 network = d * network * d;
 
 % generate data sampled from GGM
-sampleData = GenerateData(network,NUM_SAMPLES); 
+data = GenerateData(network,NUM_SAMPLES); 
