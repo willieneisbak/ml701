@@ -9,11 +9,9 @@ function samples = bdmcmc_static(data_t,P,b,D,printout)
 % (3) b is the G-Wishart degrees of freedom parameter 
 % (4) D is the G-Wishart matrix parameter
 
-if nargin<5
-    printout==true;
-end
+if nargin<5, printout==true; end
 
-burn=1000;
+burn=100; %%%%
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
@@ -25,7 +23,7 @@ priorG='Uniform'; % can be 'Uniform' or 'Poisson'
 
 if strcmpi(priorG,'Uniform'),id=1;pr=0;end
 if strcmpi(priorG,'Poisson'),id=2;pr=1;end
-%S = getS(data_t,n,meanzero); %%%% COMPLETE THIS MATLAB FUNCTION   %Should return S=covariance matrix??
+%S = getS(data_t,n,meanzero); 
 S = cov(data_t);  % could create my own function here like in BDgraph
 bstar = b+n; % posterior update for b param of G-Wishart
 Ds = D+S; % posterior update for D param of G-Wishart
@@ -38,6 +36,7 @@ lambda=[];
 count=0;allAcount=0;
 alla=ceil(iter/2000); % alla needs to be saved for plotConvergency function
 
+disp('made it here: 01') %%%%
 for g=1:iter
     % if print==T, cat(paste('time =', format(Sys.time(), '%X')), paste(c('Sum.links = ',sum(A)),collapse=''), fill = TRUE, labels = paste('{',paste(c('iter=',g),collapse=''),'}:',sep='')); end
     if printout, fprintf('iter=%d\n',g); end
@@ -54,6 +53,7 @@ for g=1:iter
                 if rates(i,j)==Inf, rates(i,j)=gamma(170); end
             end
         end
+        %disp(['made it here: 02. i=',num2str(i)]) %%%%
     end
     if mod(9,alla)==0
         allAcount=allAcount+1;

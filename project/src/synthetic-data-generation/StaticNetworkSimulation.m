@@ -9,8 +9,8 @@
 
 function [network,sampleData] = StaticNetworkSimulation()
 
-NUM_VERTICES = 10;
-NUM_EDGES = 5;
+NUM_VERTICES = 20;
+NUM_EDGES = 12;
 NUM_SAMPLES = 100;
 
 global MAX_DEGREE
