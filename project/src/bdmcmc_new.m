@@ -11,7 +11,7 @@ function samples = bdmcmc_static(data_t,P,b,D,printout)
 
 if nargin<5, printout==true; end
 
-burn=1000; %%%%
+burn=100; %%%%
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
@@ -41,13 +41,20 @@ for g=1:iter
     % if print==T, cat(paste('time =', format(Sys.time(), '%X')), paste(c('Sum.links = ',sum(A)),collapse=''), fill = TRUE, labels = paste('{',paste(c('iter=',g),collapse=''),'}:',sep='')); end
     if printout, fprintf('iter=%d\n',g); end
     rates = zeros(length(K));
+    %%%%
+    Knew = SamplePrecisionMatrix_quick(A,bstar,Ts,Hs);
+    %%%%
     for i=1:(p-1)
         for j=(i+1):p
             if A(i,j)==0, rates(i,j)=birth_rate; end   % set birth rates for non-edges
             if A(i,j)==1   % set death rates for edges
                 Aminus=A;
                 Aminus(i,j)=0;
-                Kminus = SamplePrecisionMatrix_quick(Aminus,bstar,Ts,Hs);
+                %Kminus = SamplePrecisionMatrix_quick(Aminus,bstar,Ts,Hs);
+                %%%%
+                Kminus=Knew;
+                Kminus(i,j) = 0;
+                %%%%
                 if (sum(A(:))==0 & pr==0), pr=1; end
                 rates(i,j)=((sum(A(:))^pr)*(birth_rate^(1-pr)))*exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(sum(diag(S*(K-Kminus))))/2);
                 if rates(i,j)==Inf, rates(i,j)=gamma(170); end

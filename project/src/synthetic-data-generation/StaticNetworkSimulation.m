@@ -9,7 +9,7 @@
 
 function [network,sampleData] = StaticNetworkSimulation()
 
-NUM_VERTICES = 20;
+NUM_VERTICES = 12;
 NUM_EDGES = 12;
 NUM_SAMPLES = 100;
 
