@@ -13,5 +13,9 @@ for i=1:length(graphCell)
 end
 denom = sum(ones(1,length(graphCell))./weightVec); % compute denominator
 meanWeightedGraph = sumGraphs / denom;
-%meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanWeightedGraph>0.05)) = 1; %%%%fixed 0.15 here for now
-meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanWeightedGraph>0.15)) = 1; %%%%fixed 0.15 here for now
+
+%meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanWeightedGraph>0.05)) = 1; %%%% fixed 0.15 here for now (at midway report)
+
+%meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanWeightedGraph>0.5)) = 1; %%%% fixed at low num (for bdmcmc_static)
+
+meanGraph = zeros(length(meanWeightedGraph)); meanGraph(find(meanWeightedGraph>0.5)) = 1; %%%% fixed at 0.5 (for bdmcmc_new) 

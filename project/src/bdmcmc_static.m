@@ -11,7 +11,7 @@ function samples = bdmcmc_static(data_t,P,b,D,printout)
 
 if nargin<5, printout==true; end
 
-burn=1000; %%%%
+burn=5000; %%%%
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
@@ -48,12 +48,11 @@ for g=1:iter
                 Aminus=A;
                 Aminus(i,j)=0;
                 Kminus = SamplePrecisionMatrix_quick(Aminus,bstar,Ts,Hs);
-                if (sum(A(:))==0 & pr==0), pr=1; end
-                rates(i,j)=((sum(A(:))^pr)*(birth_rate^(1-pr)))*exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(sum(diag(S*(K-Kminus))))/2);
+                if (sum(A(:))==0 & pr==0), pr=1; end  %%%% [I don't see how A could sum to 0 ever, since it has an element=1]
+                rates(i,j) = ((sum(A(:))^pr) * (birth_rate^(1-pr))) * exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(diag(S*(K-Kminus)))/2);
                 if rates(i,j)==Inf, rates(i,j)=gamma(170); end
             end
         end
-        %disp(['made it here: 02. i=',num2str(i)]) %%%%
     end
     if mod(9,alla)==0
         allAcount=allAcount+1;

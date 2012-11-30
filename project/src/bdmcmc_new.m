@@ -11,7 +11,7 @@ function samples = bdmcmc_static(data_t,P,b,D,printout)
 
 if nargin<5, printout==true; end
 
-burn=100; %%%%
+burn=5000; %%%%
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
@@ -54,6 +54,7 @@ for g=1:iter
                 %%%%
                 Kminus=Knew;
                 Kminus(i,j) = 0;
+                Kminus(j,i) = 0;
                 %%%%
                 if (sum(A(:))==0 & pr==0), pr=1; end
                 rates(i,j)=((sum(A(:))^pr)*(birth_rate^(1-pr)))*exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(sum(diag(S*(K-Kminus))))/2);
