@@ -1,0 +1,98 @@
+Our model / time varying bdmcmc case:
+from results in file: exp03_synth_pt47alpha_trials.mat 
+
+>> netcell = {networkcell{1},networkcell{1},networkcell{1},networkcell{2},networkcell{2},networkcell{2}}
+
+netcell = 
+
+    [12x12 double]    [12x12 double]    [12x12 double]    [12x12 double]    [12x12 double]    [12x12 double]
+
+>> error_1 = getSmcError(graph{1},netcell)
+
+error_1 =
+
+   230
+
+>> error_1 = getSmcError(graph{2},netcell)
+
+error_1 =
+
+   121
+
+>> error_1 = getSmcError(graph{3},netcell)
+
+error_1 =
+
+   110
+
+>> error_1 = getSmcError(graph{4},netcell)
+
+error_1 =
+
+    98
+
+>> error_1 = getSmcError(graph{5},netcell)
+
+error_1 =
+
+    78
+
+>> error_1 = getSmcError(graph{6},netcell)
+
+error_1 =
+
+    65
+
+>> error_1 = getSmcError(graph{7},netcell)
+
+error_1 =
+
+    58
+
+
+
+
+And here's results for non-time-varying bdmcmc case:
+from results in file: exp03_synth_pt47alpha_trials.mat 
+
+>> getSmcError(graphs{1},netcell)
+
+ans =
+
+   239
+
+>> getSmcError(graphs{2},netcell)
+
+ans =
+
+    118
+
+>> getSmcError(graphs{3},netcell)
+
+ans =
+
+   140
+
+>> getSmcError(graphs{4},netcell)
+
+ans =
+
+    114
+
+>> getSmcError(graphs{5},netcell)
+
+ans =
+
+    94
+
+>> getSmcError(graphs{6},netcell)
+
+ans =
+
+   116
+
+>> getSmcError(graphs{7},netcell)
+
+ans =
+
+    89

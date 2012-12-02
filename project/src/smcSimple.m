@@ -2,15 +2,11 @@ function finalSamples = smcSimple(data)
 
 % Sampling with the simple version of smc.
 %
-% Description of function 
-%
 % Inputs:
 % (1) data is a 1xT cell-array; each element is an nxd matrix of observations from a single point in time 
-% (2) Input two
-% (3) Input three
-
-
+%
 % ----------------------------------------------
+% Procedure:
 % 1) do static inference on t=1 
 % 2) for each t=2:T
 %   a) for each particle k=1:K
@@ -23,7 +19,7 @@ function finalSamples = smcSimple(data)
 %   compute weight: P(X|K)
 % ---------------------------------------------
 
-d = size(data{1},2);
+d = size(data{1},2); % number of nodes / length of adjacency and precision matirices
 
 P = 10000; % number of particles
 b = 3; % G-Wishart prior param b

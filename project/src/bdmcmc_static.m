@@ -1,4 +1,4 @@
-function samples = bdmcmc_static(data_t,P,b,D,printout)
+function samples = bdmcmc_static(data_t,P,b,D)
 
 % BDMCMC for samples from posterior over graphs and precision
 % matrices in a Bayesian Gaussian graphical model
@@ -9,9 +9,9 @@ function samples = bdmcmc_static(data_t,P,b,D,printout)
 % (3) b is the G-Wishart degrees of freedom parameter 
 % (4) D is the G-Wishart matrix parameter
 
-if nargin<5, printout==true; end
+printout=false; % print at each iteration
 
-burn=5000; %%%%
+burn=8000; %%%%
 iter = P+burn;
 n = size(data_t,1);
 p = size(data_t,2); 
@@ -49,7 +49,8 @@ for g=1:iter
                 Aminus(i,j)=0;
                 Kminus = SamplePrecisionMatrix_quick(Aminus,bstar,Ts,Hs);
                 if (sum(A(:))==0 & pr==0), pr=1; end  %%%% [I don't see how A could sum to 0 ever, since it has an element=1]
-                rates(i,j) = ((sum(A(:))^pr) * (birth_rate^(1-pr))) * exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(diag(S*(K-Kminus)))/2);
+                %rates(i,j) = ((sum(A(:))^pr) * (birth_rate^(1-pr))) * exp((n/2)*(log(abs(det(Kminus)))-log(abs(det(K))))+sum(diag(S*(K-Kminus)))/2);
+                rates(i,j) = exp( (n/2)*(log(abs(det(Kminus)))-log(abs(det(K)))) + trace(S*(K-Kminus))/2 );
                 if rates(i,j)==Inf, rates(i,j)=gamma(170); end
             end
         end

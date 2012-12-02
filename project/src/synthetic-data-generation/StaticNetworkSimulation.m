@@ -9,9 +9,9 @@
 
 function [network,sampleData] = StaticNetworkSimulation()
 
-NUM_VERTICES = 25;
-NUM_EDGES = 35;
-NUM_SAMPLES = 100;
+NUM_VERTICES = 12;
+NUM_EDGES = 20;
+NUM_SAMPLES = 1;
 
 global MAX_DEGREE
 global THETA_MIN
