@@ -1,10 +1,6 @@
 function resultcell = exp03_syntheticExperiment()
 
 % testing SMC inference on synthetic data
-% note: need to fix alpha param in the smc function
-    % alpha was set to 0.47 (default) for our time-varying model
-    % alpha was set to 0.5 for the independent bdmcmc (non-time-varying) model
-
 
 addpath('synthetic-data-generation');
 NUM_VERTICES = 12; NUM_EDGES = 20; NUM_SAMPLES = 100;
@@ -39,6 +35,7 @@ network2 = d * network2 * d;
 
 networkcell{1} = network1;
 networkcell{2} = network2;
+netCell = {networkcell{1},networkcell{1},networkcell{1},networkcell{2},networkcell{2},networkcell{2}};
 
 % generate data sampled from GGM
 data{1} = GenerateData(networkcell{1},NUM_SAMPLES); 
@@ -48,15 +45,61 @@ data{4} = GenerateData(networkcell{2},NUM_SAMPLES);
 data{5} = GenerateData(networkcell{2},NUM_SAMPLES); 
 data{6} = GenerateData(networkcell{2},NUM_SAMPLES); 
 
-% do inference
-alpha = 0.47;
-%alpha = 0.5;
-trials = [50,500:500:3000];
-for i=1:length(trials)
-    tic; graphcell = smc(data,trials(i),alpha); toc
-    graphs{i} = graphcell;
-    fprintf('FINISHED TRIAL %d.\n',i);
-    save('exp03_synth_pt5alpha_trials');
+% do inference (for 3 cases: time-varying, static-expanded, and static-collapsed)
+numPtsToAve = 5;
+
+%for i=1:numPtsToAve
+    %disp('STARTING TIME VARYING CASE')
+    %alpha = 0.47; savestring = 'exp03_synth_pt47alpha_trials'; % time-varying
+    %graphs_tv{i} = getGraphcell_perTrial(data,alpha);
+    %save(savestring);
+%end
+%errVec_tv = resultsPerCase(graphs_tv,netCell)
+
+%for i=1:numPtsToAve
+    %disp('STARTING STATIC EXPANDED CASE')
+    %alpha = 0.5; savestring = 'exp03_synth_pt5alpha_trials'; % static-expanded
+    %graphs_se{i} = getGraphcell_perTrial(data,alpha);
+    %save(savestring);
+%end
+%errVec_se = resultsPerCase(graphs_se,netCell)
+
+for t=2:6, data{1}=[data{1};data{t}]; end
+data(2:6) = [];
+for i=1:numPtsToAve
+    disp('STARTING STATIC COLLAPSED CASE')
+    alpha = 0.5;
+    savestring = 'exp03_synth_pt5alphaCollapsed_trials'; % static-collapsed
+    graphs_sc{i} = getGraphcell_perTrial(data,alpha);
+    save(savestring);
+end
+for i=1:length(graphs_sc)
+    for j=1:length(graphs_sc{i})
+        graphs_sc{i}{j} = {graphs_sc{i}{j}{1},graphs_sc{i}{j}{1},graphs_sc{i}{j}{1},graphs_sc{i}{j}{1},graphs_sc{i}{j}{1},graphs_sc{i}{j}{1}};
+    end
+end
+errVec_sc = resultsPerCase(graphs_sc,netCell)
+
+resultcell = {graphs_tv, graphs_se, graphs_sc, networkcell, errVec_tv, errVec_se, errVec_sc};
+
+
+function graphs = getGraphcell_perTrial(dat,alph)
+    trials = [50,500:500:3000];
+    for P=1:length(trials)
+        tic; graphcell = smc(dat,trials(P),alph); toc
+        graphs{P} = graphcell;
+        fprintf('FINISHED TRIAL %d.\n',P);
+    end
 end
 
-resultcell = {graphs, networkcell};
+function err = resultsPerCase(graphy,netcell)
+    for j=1:length(graphy{1}) % loop through multi-results, which is same length for all graphy{i}
+        err(j) = 0;
+        for i=1:length(graphy)
+            err(j) = err(j) + (getSmcError(graphy{i}{j},netcell) / length(graphy));
+        end
+    end
+end
+
+
+end

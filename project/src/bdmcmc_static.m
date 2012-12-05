@@ -86,3 +86,6 @@ function result=melt(rates,p)
         v2=[v2,(i+1):p];
     end
     result = [v1',v2',v3];
+end
+
+end
