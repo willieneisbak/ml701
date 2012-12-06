@@ -7,7 +7,7 @@
 
 function [A,errors] = RunGibbsSampling(trueA,X,currA,b,D,P,q)
 
-NUM_ITER = 20;
+NUM_ITER = 10;
 
 [T ~] = size(X);
 p = size(X{1},2);

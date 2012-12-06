@@ -22,3 +22,5 @@ plot(samples,aveTvErr,'r-*',samples,aveStaticErr,'b-x',samples,aveStaticColErr,'
 legend('Dynamic Bayesian GGM', 'Static Bayesian GGM (expanded)', 'Static Bayesian GGM (collapsed)');
 ylabel('Average Error in Inferred Adjacency Matrix');
 xlabel('Number of Samples');
+xlim([0,3050])
+ylim([0,55])

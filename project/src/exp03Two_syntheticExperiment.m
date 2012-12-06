@@ -1,9 +1,9 @@
-function resultcell = exp03_syntheticExperiment()
+function resultcell = exp03Two_syntheticExperiment()
 
 % testing SMC inference on synthetic data
 
 errVec = [];
-numSamples = 50:50:500;
+numSamples = [10,50,100,500,1000];
 ptsToAve = 5;
 for ptToAve=1:ptsToAve
     for iter = 1:length(numSamples)
