@@ -1,1 +1,0 @@
-To demonstrate this model, we perform inference on two real-world datasets. In the first, we infer the structure of a GGM for a set of 20 companies over a sequence of 10 weeks based on their stock prices, and in the second, we infer a network of 25 genes as the network varies over a sequence of 9 cell types.   
