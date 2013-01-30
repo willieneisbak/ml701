@@ -52,47 +52,66 @@ error_1 =
 
 
 
-And here's results for non-time-varying bdmcmc case:
+And here's results for non-time-varying bdmcmc case (static-expanded):
 from results in file: exp03_synth_pt47alpha_trials.mat 
 
->> getSmcError(graphs{1},netcell)
+>> for i=1:3, net{i} = networkcell{1}; end; for i=4:6, net{i} = networkcell{2}; end;
+>> for i=1:6, graphcell{i} = graphs{1}{1}; end;
+>> getSmcError(graphcell, net)
 
 ans =
 
-   239
+   282
 
->> getSmcError(graphs{2},netcell)
-
-ans =
-
-    118
-
->> getSmcError(graphs{3},netcell)
+>> for i=1:6, graphcell{i} = graphs{2}{1}; end;
+>> getSmcError(graphcell, net)
 
 ans =
 
-   140
+   192
 
->> getSmcError(graphs{4},netcell)
-
-ans =
-
-    114
-
->> getSmcError(graphs{5},netcell)
+>> for i=1:6, graphcell{i} = graphs{3}{1}; end;
+>> getSmcError(graphcell, net)
 
 ans =
 
-    94
+   306
 
->> getSmcError(graphs{6},netcell)
-
-ans =
-
-   116
-
->> getSmcError(graphs{7},netcell)
+>> for i=1:6, graphcell{i} = graphs{4}{1}; end;
+>> getSmcError(graphcell, net)
 
 ans =
 
-    89
+    300
+
+>> for i=1:6, graphcell{i} = graphs{5}{1}; end;
+>> getSmcError(graphcell, net)
+
+ans =
+
+   306
+
+>> for i=1:6, graphcell{i} = graphs{6}{1}; end;
+>> getSmcError(graphcell, net)
+
+ans =
+
+   132
+
+>> for i=1:6, graphcell{i} = graphs{7}{1}; end;
+>> getSmcError(graphcell, net)
+
+ans =
+
+   306
+
+
+
+% RESULTS FOR SECOND ROUND OF EXPERIMENTS (running multiple times, and with averaging)
+
+error for time-varying case:
+errVec_tv = 240.8000  135.0000   91.8000   76.2000   65.0000   61.4000   58.6000
+error for static-expanded case:
+errVec_se = 278.4000  140.4000  108.0000  101.4000  95.2000   84.2000  75.4000
+error for static-collapsed case:
+errVec_sc = 246.0000  237.6000  162.0000   98.4000  99.6000  97.2000  94.6000
